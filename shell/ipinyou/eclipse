@@ -1,0 +1,2 @@
+#!/bin/bash 
+nohup /home/psc/eclipse/eclipse &> /dev/null &

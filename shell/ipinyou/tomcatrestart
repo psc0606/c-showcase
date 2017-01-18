@@ -1,0 +1,9 @@
+#!/bin/bash
+port=$1
+if [ -n "$port" ]; then
+	tomcatstop $port
+	sleep 1
+	echo "正在启动端口为$port的tomcat服务器..."
+	tomcatstart $port
+fi
+

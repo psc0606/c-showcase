@@ -1,0 +1,3 @@
+#!/bin/bash 
+cmd="$1"
+ssh weiwei.wang@192.168.152.220 $cmd
