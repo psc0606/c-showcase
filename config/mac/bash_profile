@@ -1,0 +1,24 @@
+#!/bin/bash
+#JAVA配置
+JAVA_8_HOME=$(/usr/libexec/java_home -v1.8)
+CLASSPATH=.:$JAVA_8_HOME/lib:$JAVA_8_HOME/jre/lib
+JAVA_HOME=$JAVA_8_HOME
+export JAVA_HOME CLASSPATH
+
+#本地shell脚本
+PATH=$PATH:/Users/momo/local_bin
+#mongodb
+PATH=$PATH:/Users/momo/dev-tools/mongodb-osx-x86_64-3.4.4/bin
+export PATH
+
+#GNU Coreutils实现mac配色
+if brew list | grep coreutils > /dev/null ; then
+  PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"
+  alias ls='ls -F --show-control-chars --color=auto'
+  eval `gdircolors -b $HOME/.dir_colors`
+fi
+
+#别名
+alias l='ls'
+alias la='ls -a'
+alias ll='ls -lrt'
