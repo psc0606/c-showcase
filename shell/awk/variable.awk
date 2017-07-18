@@ -44,6 +44,7 @@ END {
 
 	print "数组测试"
     #awk for in循环比较特殊，var拿到的是数组的下标, 而且下标的顺序不是特定的
+	delete myarray[2] #删除数组元素
 	for(var in myarray) {
 		print myarray[var]
 	}
