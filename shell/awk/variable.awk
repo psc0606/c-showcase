@@ -27,4 +27,12 @@ END {
 	print float2;
 	print float3;
 	print float4;
+
+    #awk借鉴C语言，支持丰富的数学运算符
+	int1 += 3;
+	print int1;
+	int2 *= 3;
+	print int2;
+	int2++;
+	print int2;
 }
