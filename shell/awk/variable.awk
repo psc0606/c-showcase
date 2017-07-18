@@ -13,6 +13,12 @@ BEGIN {
 	float2 = 10.;
 	float3 = 0.25;
 	float4 = .25;
+
+    #awk数组下标从1开始, 这点不同于C语言
+	myarray[1] = "This";
+	myarray[2] = 1111;
+	myarray[3] = 2222;
+	myarray["index"] = "xxxx";
 }
 {}
 END {
@@ -35,4 +41,10 @@ END {
 	print int2;
 	int2++;
 	print int2;
+
+	print "数组测试"
+    #awk for in循环比较特殊，var拿到的是数组的下标, 而且下标的顺序不是特定的
+	for(var in myarray) {
+		print myarray[var]
+	}
 }
