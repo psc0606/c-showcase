@@ -20,7 +20,26 @@ BEGIN {
 	myarray[3] = 2222;
 	myarray["index"] = "xxxx";
 }
-{}
+{ 
+	print "命令行参数个数", ARGC;
+
+    #命令行参数数组ARGV
+	print "文件名", FILENAME
+	print "当前行的列数", NF
+
+	#当前遍历第几行了
+	print "当前处理过的行数", NR
+	print "当前文件的行号，文件自己的行号", FNR
+
+	#通过split定义数组
+	str1 = "a,b,c,d";
+	split(str1, alphabet, ",");
+	print "split分割字符串", alphabet[1]
+
+	#空格为字符串连接运算符
+	x = "Hello" "Wolrd"
+	print "字符串连接", x
+}
 END {
 	print int1;
 	print int2;
