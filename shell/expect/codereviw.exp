@@ -1,7 +1,0 @@
-#!/bin/env expert
-set password p1990
-spawn sudo mount -t nfs 10.1.1.36:/data/NFS /home/psc/toolchain
-expect "*密码*"
-send "$password\r"
-expect eof
-exit
