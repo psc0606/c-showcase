@@ -1,0 +1,181 @@
+FreeBSD两个经典内核模块写法：siftr.c和bpf.c
+挂载光盘 mount_cd9660 /dev/acd0 /cdrom 或 mount /cdrom/
+
+web svn服务器地址https://svnweb.freebsd.org/base/
+客户端地址svn://svn.freebsd.org/base/
+svn://svn.freebsd.org/base/release/8.3.0
+svn checkout svn://svn.freebsd.org/base/release/8.3.0 /usr/src
+
+freebsd在github上的https://github.com/freebsd
+
+grep -R . -e "Makefile"
+cd /usr/include;find . -name "*.h" | xargs grep  "IPPROTO_TCP"
+find /usr -name libnet.h
+
+注意在安装freebsd时，注意选择把内核源码树也选上，用于后来内核模块开发，如何未选择，只能手动安。
+
+freebsd无法在用户主目录下编译模块，在其子目录却可以
+
+连接freebsd的ssh登陆，输入用户名后，需要等一段时间才可以输出密码，这是由于sshd反解域名引起的，需要修改sshd的配置文件解决。
+1 编辑/etc/ssh/sshd_config文件，去除#UseDNS yes项前的#并将yes修改为no
+2 执行/etc/rc.d/sshd restart重启ssh服务
+
+kld接口允许系统管理员从运行的系统中动态地添加和删除功能。 这允许设备驱动程序的编写者将他们的新改动加载到运行的内核中， 而不用为了测试新改动而频繁地重启。
+
+kld接口通过下面的特权命令使用：
+kldload - 加载新内核模块
+kldunload - 卸载内核模块
+kldstat - 列举当前加载的模块
+
+tcpdump -v -i em0 port 50001
+
+freebsd的收包处理顺序分别是:dev(网卡中断)->net(enther处理以太帧)->netinet(ip数据) filterhook实现便在netinet内 首先看下ip_input.c内的代码如何处理hook机制
+
+freebsd可以如下编译example.c文件:
+1. gcc/cc
+2. make example
+
+ip.h  struct ip{}
+ipproto.h IPPROTO_UDP/IPPROTO_ICMP
+mbuf.h
+#define	M_PKTHDR	0x00000002 /* start of record */
+#define	M_EXT		0x00000001 /* has associated external storage */
+
+ip首部
+ip.h/struct ip{}
+
+udp首部
+udp.h/struct udphdr{}
+
+ip/udp的联合首部，但有可能字段不同
+udp_var.h/struct udpiphdr{}
+
+mac(以太网)首部
+ethernet.h/struct ether_header{}
+
+pfil.c
+
+uipc_socket.c/sosend, soreceive
+
+freebsd源码中可供参考/tools/tools/kttcp
+
+#define	EADDRNOTAVAIL	49		/* Can't assign requested address */
+
+确认内核是否可以打开文件，读已经打开的log文件， 内核发送UDP数据包函数
+
+frebsd dhcp客户端
+1、vi /etc/rc.conf 添加
+ifconfig_dc0="DHCP"
+dhcp_program="/sbin/dhclient"
+dccp_flags=""
+2、reboot
+
+静态ip dc0为网卡名 ifconfig_dc0="inet 192.168.1.3 netmask 255.255.255.0"
+defaultrouter="192.168.1.1"
+buf_ring.h
+
+
+驱动与应用程序间传递数据
+uiomove()/copyin()/copyout()
+
+kldload alq
+kldunload alq
+alq技术，方便从内核写日志https://www.freebsd.org/cgi/man.cgi?query=alq&apropos=0&sektion=0&manpath=FreeBSD+10.1-RELEASE&arch=default&format=html
+参考freebsd siftr模块siftr.c中ALQ机制写法。
+
+关于不改动Freebsd内核的防火墙实现机理PilterHook：
+		freebsd是一个开源操作系统我们可以实现底层过滤而不是向windows一样需要用中间层miniport hook等方法,
+	但是freebsd依然为内核模块提供hook接口以方便不需重新编译内核（有些防火墙的实现需要改动内核以添加防火
+	墙函数等）就可以实现防火墙过滤功能。
+		首先我们先来看一下freebsd的网络处理机制。收包处理顺序分别是:dev(网卡中断)->net(enther处理以太帧)
+	->netinet(ip数据)。Filterhook实现便在netinet内（看下ip_input.c内的代码如何处理hook机制）。
+
+		FreeBSD操作系统本身内置的IP信息包检查机制：ipfw和ipfilter及pf。在创建决定允许哪些信息包进入
+		系统、哪些信息包会被拒之系统门外的规则集方面，二种机制各有自己独特的语法。
+		
+基于x86的机器上，内核源码位于 /usr/src/sys/i386
+bsd.kmod.mk位于 /usr/src/share/mk/bsd.kmod.mk
+
+dummynet -- traffic shaper, bandwidth manager and delay emulator
+
+FreeBSD：
+netgraph -- graph based kernel networking subsystem
+SIFTR -- Statistical Information For TCP Research
+libnet安装
+ ./configure 
+ make 
+ make install
+
+linux
+netlink机制
+
+ldd
+gcc libnet_short.c -L/usr/local/lib/ -lnet
+
+FreeBSD默认安装了gcc，但默认搜索路径好像只是/usr/include和/usr/lib，连/usr/local/include和/usr/local/lib都不会搜索，可编辑/etc/profile，并加入以下内容：
+export属于bash shell命令
+export C_INCLUDE_PATH="/usr/local/include"
+export LIBRARY_PATH="/usr/local/lib"
+
+gcc libnet_short.c -lnet
+
+tcpdrop
+
+FreeBSD hash函数：
+hashinit()
+hash32()
+
+FreeBSD内核链表LIST_HEAD
+可参考siftr.c中关于hashinit()等函数的使用
+
+2015-1-14
+FreeBSD内核提供了一种安全机制的字符串缓存操作
+sbuf_printf()/ sbuf_data()
+
+内核与应用层之间共享文件方案可行性？
+内核与应用层之间共享内存
+
+网络IP地址转点字符串形式的点分十进制形式:
+FreeBSD内核与应用程序中均可inet_ntoa()/inet_ntop();
+
+Freebsd开机脚步
+/etc/rc.local（pfsense下有额外的问题，未知原因）
+/usr/local/etc/rc.d/（推荐，注意chmod +x myscript.sh  后缀必须为sh）
+
+2015-3-5
+FreeBSD10.1的默认编译器不再是GNU的GCC，而是BSD的clang
+
+FreeBSD中这个结构体和格式与Linux中的不同。
+/*
+ * ARP ioctl request
+ */
+struct arpreq {
+	struct	sockaddr arp_pa;		/* protocol address */
+	struct	sockaddr arp_ha;		/* hardware address */
+	int	arp_flags;			/* flags */
+};
+
+//Linux中
+struct arpreq{
+	struct sockaddr arp_pa;//协议地址
+	struct sockaddr arp_ha;//硬件地址
+	int arp_flags;//标记
+	struct sockaddr arp_netmask;//协议地址的子网掩码
+	char arp_dev[16];//查询网络接口的名称
+}
+
+时间戳
+/sys/kern/kern_time.c gettimeofday();
+
+FreeBSD arp命令实现
+/usr/src/usr.sbin/arp/arp.c
+
+ARP表查询
+arp -i re0 -a //查询指定接口re0的ARP表项
+arp -a	//查询所有接口的ARP表项 
+
+FreeBSD（Linux中不一定支持且功能不一定相同）
+sysctl命令或函数, 用于设置或获取内核状态
+reallocf()-->realloc()功能
+
+FreeBSD中通过sysctl获取ARP，路由表。但Linux通过ioctl获取。
