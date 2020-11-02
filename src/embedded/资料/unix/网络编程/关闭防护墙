@@ -1,0 +1,8 @@
+
+ifconfig
+
+chkconfig iptables --list
+chkconfig iptables on
+chkconfig iptables off
+service iptables start
+service iptables stop

@@ -1,0 +1,53 @@
+#include<stdio.h>
+#include<string.h>
+int main()
+{
+	char str[100],str1[100],str2[100];
+	printf("请输入一句英文:");
+	gets(str);
+	printf("要替换的单词:");
+	gets(str1);
+	printf("替换成:");
+	gets(str2);
+	char *p,*q;
+	int n=0,i;
+	for(p=str;*p!='\0';p++)
+	{
+		printf("*p=%c\n",*p);
+		for(q=str1;*q!='\0';q++)
+		{
+			if(*p==*q)
+			{
+				printf("找到相同字母\n");
+				n++;
+			}
+			else
+			{
+				if(n==0)
+				{
+					p--;
+				}
+				else
+				{
+					p=p-n+1;
+					n=0;
+					break;
+				}
+			}
+			p++;
+		}
+		printf("n=%d\n",n);
+		if(n==strlen(str1))
+		{
+			p=p-n;
+			for(i=0;i<n;i++)
+			{
+				*p=str2[i];
+				p++;
+			}
+			p--;
+			printf("*pkjgajgjh=%c\n",*p);
+		}
+	}
+	printf("%s\n",str);
+}

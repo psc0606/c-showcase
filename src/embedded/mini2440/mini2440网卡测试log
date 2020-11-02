@@ -1,0 +1,222 @@
+netperf 与网络性能测量
+http://www.ibm.com/developerworks/cn/linux/l-netperf/
+进行UDP_STREAM测试时需注意：UDP传输的不可靠性，在使用netperf时要确保发送的缓冲区大小不大于接收缓冲区大小，否则数据会丢失，netperf将给出错误的结果。因此，对于接收到分组的统计不一定准确，需要结合发送分组的统计综合得出结论
+
+以mini2440作客户端端测试PC
+1.
+[root@FriendlyARM /root]# ./netperf -H 192.168.1.2
+MIGRATED TCP STREAM TEST from 0.0.0.0 (0.0.0.0) port 0 AF_INET to 192.168.1.2 (192.168.1.2) port 0 AF_INET
+Recv   Send    Send                          
+Socket Socket  Message  Elapsed              
+Size   Size    Size     Time     Throughput  
+bytes  bytes   bytes    secs.    10^6bits/sec  
+
+ 87380  16384  16384    10.02      24.13 
+
+2.
+[root@FriendlyARM /root]# ./netperf -H 192.168.1.2 -c
+MIGRATED TCP STREAM TEST from 0.0.0.0 (0.0.0.0) port 0 AF_INET to 192.168.1.2 (192.168.1.2) port 0 AF_INET
+Recv   Send    Send                          Utilization       Service Demand
+Socket Socket  Message  Elapsed              Send     Recv     Send    Recv
+Size   Size    Size     Time     Throughput  local    remote   local   remote
+bytes  bytes   bytes    secs.    10^6bits/s  % S      % U      us/KB   us/KB
+
+ 87380  16384  16384    10.01        24.29   100.00   -1.00    337.314  -1.000
+
+3.
+[root@FriendlyARM /root]# ./netperf -H 192.168.1.2 -- -m 1024
+MIGRATED TCP STREAM TEST from 0.0.0.0 (0.0.0.0) port 0 AF_INET to 192.168.1.2 (192.168.1.2) port 0 AF_INET
+Recv   Send    Send                          
+Socket Socket  Message  Elapsed              
+Size   Size    Size     Time     Throughput  
+bytes  bytes   bytes    secs.    10^6bits/sec  
+
+ 87380  16384   1024    10.01      19.44 
+
+4.
+[root@FriendlyARM /root]# ./netperf -H 192.168.1.2 -- -m 1024 -c
+MIGRATED TCP STREAM TEST from 0.0.0.0 (0.0.0.0) port 0 AF_INET to 192.168.1.2 (192.168.1.2) port 0 AF_INET
+Recv   Send    Send                          
+Socket Socket  Message  Elapsed              
+Size   Size    Size     Time     Throughput  
+bytes  bytes   bytes    secs.    10^6bits/sec  
+
+ 87380  16384   1024    10.01       3.22 
+
+以PC作客户端来厕所mini2440作为netserver
+5.
+coolmac@coolmac-OptiPlex-790:~$ netperf -H 192.168.1.3 -C -l 60 -- -m 4
+MIGRATED TCP STREAM TEST from 0.0.0.0 (0.0.0.0) port 0 AF_INET to 192.168.1.3 (192.168.1.3) port 0 AF_INET : demo
+Recv   Send    Send                          Utilization       Service Demand
+Socket Socket  Message  Elapsed              Send     Recv     Send    Recv
+Size   Size    Size     Time     Throughput  local    remote   local   remote
+bytes  bytes   bytes    secs.    10^6bits/s  % U      % S      us/KB   us/KB
+
+ 87380  16384      4    60.02        31.25   -1.00    97.87    -1.000  256.525
+
+6.
+coolmac@coolmac-OptiPlex-790:~$ netperf -H 192.168.1.3 -C -l 60 -- -m 8
+MIGRATED TCP STREAM TEST from 0.0.0.0 (0.0.0.0) port 0 AF_INET to 192.168.1.3 (192.168.1.3) port 0 AF_INET : demo
+Recv   Send    Send                          Utilization       Service Demand
+Socket Socket  Message  Elapsed              Send     Recv     Send    Recv
+Size   Size    Size     Time     Throughput  local    remote   local   remote
+bytes  bytes   bytes    secs.    10^6bits/s  % U      % S      us/KB   us/KB
+
+ 87380  16384      8    60.02        31.27   -1.00    97.85    -1.000  256.306
+
+7.
+coolmac@coolmac-OptiPlex-790:~$ netperf -H 192.168.1.3 -C -l 60 -- -m 16
+MIGRATED TCP STREAM TEST from 0.0.0.0 (0.0.0.0) port 0 AF_INET to 192.168.1.3 (192.168.1.3) port 0 AF_INET : demo
+Recv   Send    Send                          Utilization       Service Demand
+Socket Socket  Message  Elapsed              Send     Recv     Send    Recv
+Size   Size    Size     Time     Throughput  local    remote   local   remote
+bytes  bytes   bytes    secs.    10^6bits/s  % U      % S      us/KB   us/KB
+
+ 87380  16384     16    60.01        31.23   -1.00    97.92    -1.000  256.842
+
+8.
+coolmac@coolmac-OptiPlex-790:~$ netperf -H 192.168.1.3 -C -l 60 -- -m 32
+MIGRATED TCP STREAM TEST from 0.0.0.0 (0.0.0.0) port 0 AF_INET to 192.168.1.3 (192.168.1.3) port 0 AF_INET : demo
+Recv   Send    Send                          Utilization       Service Demand
+Socket Socket  Message  Elapsed              Send     Recv     Send    Recv
+Size   Size    Size     Time     Throughput  local    remote   local   remote
+bytes  bytes   bytes    secs.    10^6bits/s  % U      % S      us/KB   us/KB
+
+ 87380  16384     32    60.02        31.23   -1.00    98.23    -1.000  257.655
+
+9.
+coolmac@coolmac-OptiPlex-790:~$ netperf -H 192.168.1.3 -C -l 60 -- -m 64
+MIGRATED TCP STREAM TEST from 0.0.0.0 (0.0.0.0) port 0 AF_INET to 192.168.1.3 (192.168.1.3) port 0 AF_INET : demo
+Recv   Send    Send                          Utilization       Service Demand
+Socket Socket  Message  Elapsed              Send     Recv     Send    Recv
+Size   Size    Size     Time     Throughput  local    remote   local   remote
+bytes  bytes   bytes    secs.    10^6bits/s  % U      % S      us/KB   us/KB
+
+ 87380  16384     64    60.02        31.28   -1.00    98.18    -1.000  257.154
+
+10.
+coolmac@coolmac-OptiPlex-790:~$ netperf -H 192.168.1.3 -C -l 60 -- -m 128
+MIGRATED TCP STREAM TEST from 0.0.0.0 (0.0.0.0) port 0 AF_INET to 192.168.1.3 (192.168.1.3) port 0 AF_INET : demo
+Recv   Send    Send                          Utilization       Service Demand
+Socket Socket  Message  Elapsed              Send     Recv     Send    Recv
+Size   Size    Size     Time     Throughput  local    remote   local   remote
+bytes  bytes   bytes    secs.    10^6bits/s  % U      % S      us/KB   us/KB
+
+ 87380  16384    128    60.02        31.28   -1.00    98.02    -1.000  256.727
+
+11.
+coolmac@coolmac-OptiPlex-790:~$ netperf -H 192.168.1.3 -C -l 60 -- -m 256
+MIGRATED TCP STREAM TEST from 0.0.0.0 (0.0.0.0) port 0 AF_INET to 192.168.1.3 (192.168.1.3) port 0 AF_INET : demo
+Recv   Send    Send                          Utilization       Service Demand
+Socket Socket  Message  Elapsed              Send     Recv     Send    Recv
+Size   Size    Size     Time     Throughput  local    remote   local   remote
+bytes  bytes   bytes    secs.    10^6bits/s  % U      % S      us/KB   us/KB
+
+ 87380  16384    256    60.02        31.28   -1.00    98.03    -1.000  256.745
+
+12.
+coolmac@coolmac-OptiPlex-790:~$ netperf -H 192.168.1.3 -C -l 60 -- -m 512
+MIGRATED TCP STREAM TEST from 0.0.0.0 (0.0.0.0) port 0 AF_INET to 192.168.1.3 (192.168.1.3) port 0 AF_INET : demo
+Recv   Send    Send                          Utilization       Service Demand
+Socket Socket  Message  Elapsed              Send     Recv     Send    Recv
+Size   Size    Size     Time     Throughput  local    remote   local   remote
+bytes  bytes   bytes    secs.    10^6bits/s  % U      % S      us/KB   us/KB
+
+ 87380  16384    512    60.02        31.25   -1.00    98.12    -1.000  257.177 
+
+13.
+coolmac@coolmac-OptiPlex-790:~$ netperf -H 192.168.1.3 -C -l 60 -- -m 1024
+MIGRATED TCP STREAM TEST from 0.0.0.0 (0.0.0.0) port 0 AF_INET to 192.168.1.3 (192.168.1.3) port 0 AF_INET : demo
+Recv   Send    Send                          Utilization       Service Demand
+Socket Socket  Message  Elapsed              Send     Recv     Send    Recv
+Size   Size    Size     Time     Throughput  local    remote   local   remote
+bytes  bytes   bytes    secs.    10^6bits/s  % U      % S      us/KB   us/KB
+
+ 87380  16384   1024    60.02        31.26   -1.00    97.97    -1.000  256.719
+
+14.
+coolmac@coolmac-OptiPlex-790:~$ netperf -H 192.168.1.3 -C -l 60 -- -m 2048
+MIGRATED TCP STREAM TEST from 0.0.0.0 (0.0.0.0) port 0 AF_INET to 192.168.1.3 (192.168.1.3) port 0 AF_INET : demo
+Recv   Send    Send                          Utilization       Service Demand
+Socket Socket  Message  Elapsed              Send     Recv     Send    Recv
+Size   Size    Size     Time     Throughput  local    remote   local   remote
+bytes  bytes   bytes    secs.    10^6bits/s  % U      % S      us/KB   us/KB
+
+ 87380  16384   2048    60.02        31.28   -1.00    98.27    -1.000  257.331
+
+15.
+[root@FriendlyARM /root]# ./iperf -s -i 1
+------------------------------------------------------------
+Server listening on TCP port 5001
+TCP window size: 85.3 KByte (default)
+------------------------------------------------------------
+[  4] local 192.168.1.3 port 5001 connected with 192.168.1.2 port 36932
+[ ID] Interval       Transfer     Bandwidth
+[  4]  0.0- 1.0 sec  3.71 MBytes  31.1 Mbits/sec
+[  4]  1.0- 2.0 sec  3.70 MBytes  31.0 Mbits/sec
+[  4]  2.0- 3.0 sec  3.68 MBytes  30.8 Mbits/sec
+[  4]  3.0- 4.0 sec  3.68 MBytes  30.8 Mbits/sec
+[  4]  4.0- 5.0 sec  3.68 MBytes  30.8 Mbits/sec
+[  4]  5.0- 6.0 sec  3.66 MBytes  30.7 Mbits/sec
+[  4]  6.0- 7.0 sec  3.70 MBytes  31.0 Mbits/sec
+[  4]  7.0- 8.0 sec  3.71 MBytes  31.1 Mbits/sec
+[  4]  8.0- 9.0 sec  3.69 MBytes  30.9 Mbits/sec
+[  4]  9.0-10.0 sec  3.69 MBytes  31.0 Mbits/sec                                
+[  4]  0.0-10.1 sec  37.1 MBytes  30.9 Mbits/sec
+
+coolmac@coolmac-OptiPlex-790:/opt/nfsroots/root$ iperf -c 192.168.1.3 -t 10
+------------------------------------------------------------
+Client connecting to 192.168.1.3, TCP port 5001
+TCP window size: 21.0 KByte (default)
+------------------------------------------------------------
+[  3] local 192.168.1.2 port 36932 connected with 192.168.1.3 port 5001
+[ ID] Interval       Transfer     Bandwidth
+[  3]  0.0-10.1 sec  37.1 MBytes  31.0 Mbits/sec
+
+[root@FriendlyARM /root]# ./iperf -s -i 1
+------------------------------------------------------------
+Server listening on TCP port 5001
+TCP window size: 85.3 KByte (default)
+------------------------------------------------------------
+[  4] local 192.168.1.3 port 5001 connected with 192.168.1.2 port 37788
+------------------------------------------------------------
+Client connecting to 192.168.1.2, TCP port 5001
+TCP window size: 16.0 KByte (default)
+------------------------------------------------------------
+[  6] local 192.168.1.3 port 39451 connected with 192.168.1.2 port 5001
+[ ID] Interval       Transfer     Bandwidth
+[  4]  0.0- 1.0 sec  1.76 MBytes  14.7 Mbits/sec
+[  6]  0.0- 1.0 sec  1.62 MBytes  13.6 Mbits/sec
+[  4]  1.0- 2.0 sec  1.85 MBytes  15.5 Mbits/sec
+[  6]  1.0- 2.0 sec  1.50 MBytes  12.6 Mbits/sec
+[  4]  2.0- 3.0 sec  1.69 MBytes  14.2 Mbits/sec
+[  6]  2.0- 3.0 sec  1.50 MBytes  12.6 Mbits/sec
+[  4]  3.0- 4.0 sec  1.69 MBytes  14.2 Mbits/sec
+[  6]  3.0- 4.0 sec  1.62 MBytes  13.6 Mbits/sec
+[  4]  4.0- 5.0 sec  1.74 MBytes  14.6 Mbits/sec
+[  6]  4.0- 5.0 sec  1.50 MBytes  12.6 Mbits/sec                                
+[  4]  5.0- 6.0 sec  1.56 MBytes  13.1 Mbits/sec                                
+[  6]  5.0- 6.0 sec  1.62 MBytes  13.6 Mbits/sec                                
+[  4]  6.0- 7.0 sec  1.63 MBytes  13.6 Mbits/sec                                
+[  6]  6.0- 7.0 sec  1.62 MBytes  13.6 Mbits/sec                                
+[  4]  7.0- 8.0 sec  1.65 MBytes  13.8 Mbits/sec                                
+[  6]  7.0- 8.0 sec  1.62 MBytes  13.6 Mbits/sec                                
+[  4]  8.0- 9.0 sec  1.70 MBytes  14.2 Mbits/sec                                
+[  6]  8.0- 9.0 sec  1.50 MBytes  12.6 Mbits/sec                                
+[  4]  9.0-10.0 sec  1.72 MBytes  14.5 Mbits/sec                                
+[  4]  0.0-10.1 sec  17.2 MBytes  14.3 Mbits/sec
+
+coolmac@coolmac-OptiPlex-790:/opt/nfsroots/root$ iperf -c 192.168.1.3 -t 10 -d
+------------------------------------------------------------
+Server listening on TCP port 5001
+TCP window size: 85.3 KByte (default)
+------------------------------------------------------------
+------------------------------------------------------------
+Client connecting to 192.168.1.3, TCP port 5001
+TCP window size: 75.5 KByte (default)
+------------------------------------------------------------
+[  5] local 192.168.1.2 port 37788 connected with 192.168.1.3 port 5001
+[  4] local 192.168.1.2 port 5001 connected with 192.168.1.3 port 39451
+[ ID] Interval       Transfer     Bandwidth
+[  5]  0.0-10.1 sec  17.2 MBytes  14.3 Mbits/sec
+[  4]  0.0-10.1 sec  15.9 MBytes  13.2 Mbits/sec

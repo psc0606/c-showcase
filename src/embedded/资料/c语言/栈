@@ -1,0 +1,21 @@
+stack
+Push(S,x)		成功返回0，否则-1
+Pop(S,x)		成功返回0，否则-1
+
+GetTop(S,x)
+
+Empty(S)		空返回1，否则0
+is_full(S)		空返回1，否则0
+
+顺序栈
+
+#define MaxSize
+
+typedef struct
+{
+	Elem type data[MaxSize];
+	int top;
+}STACK;
+
+栈空		top = -1;
+栈满		top = MaxSize-1;
