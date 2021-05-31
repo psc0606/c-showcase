@@ -1,3 +1,3 @@
-# system c programing
+# aha-c
 * linux
 * freebsd
