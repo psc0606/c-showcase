@@ -129,6 +129,73 @@ depend:
 	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
+#=============================================================================
+# Target rules for targets named elfmain
+
+# Build rule for target.
+elfmain: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 elfmain
+.PHONY : elfmain
+
+# fast build rule for target.
+elfmain/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/elfmain.dir/build.make CMakeFiles/elfmain.dir/build
+.PHONY : elfmain/fast
+
+src/app/elf/elflib.o: src/app/elf/elflib.c.o
+
+.PHONY : src/app/elf/elflib.o
+
+# target to build an object file
+src/app/elf/elflib.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/elfmain.dir/build.make CMakeFiles/elfmain.dir/src/app/elf/elflib.c.o
+.PHONY : src/app/elf/elflib.c.o
+
+src/app/elf/elflib.i: src/app/elf/elflib.c.i
+
+.PHONY : src/app/elf/elflib.i
+
+# target to preprocess a source file
+src/app/elf/elflib.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/elfmain.dir/build.make CMakeFiles/elfmain.dir/src/app/elf/elflib.c.i
+.PHONY : src/app/elf/elflib.c.i
+
+src/app/elf/elflib.s: src/app/elf/elflib.c.s
+
+.PHONY : src/app/elf/elflib.s
+
+# target to generate assembly for a file
+src/app/elf/elflib.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/elfmain.dir/build.make CMakeFiles/elfmain.dir/src/app/elf/elflib.c.s
+.PHONY : src/app/elf/elflib.c.s
+
+src/app/elf/elfmain.o: src/app/elf/elfmain.c.o
+
+.PHONY : src/app/elf/elfmain.o
+
+# target to build an object file
+src/app/elf/elfmain.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/elfmain.dir/build.make CMakeFiles/elfmain.dir/src/app/elf/elfmain.c.o
+.PHONY : src/app/elf/elfmain.c.o
+
+src/app/elf/elfmain.i: src/app/elf/elfmain.c.i
+
+.PHONY : src/app/elf/elfmain.i
+
+# target to preprocess a source file
+src/app/elf/elfmain.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/elfmain.dir/build.make CMakeFiles/elfmain.dir/src/app/elf/elfmain.c.i
+.PHONY : src/app/elf/elfmain.c.i
+
+src/app/elf/elfmain.s: src/app/elf/elfmain.c.s
+
+.PHONY : src/app/elf/elfmain.s
+
+# target to generate assembly for a file
+src/app/elf/elfmain.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/elfmain.dir/build.make CMakeFiles/elfmain.dir/src/app/elf/elfmain.c.s
+.PHONY : src/app/elf/elfmain.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -137,6 +204,13 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... elfmain"
+	@echo "... src/app/elf/elflib.o"
+	@echo "... src/app/elf/elflib.i"
+	@echo "... src/app/elf/elflib.s"
+	@echo "... src/app/elf/elfmain.o"
+	@echo "... src/app/elf/elfmain.i"
+	@echo "... src/app/elf/elfmain.s"
 .PHONY : help
 
 
